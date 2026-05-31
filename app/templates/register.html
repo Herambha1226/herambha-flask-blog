@@ -23,6 +23,22 @@
         <input type="email" id="email" placeholder="you@example.com">
         <button class="otp-btn" id="otp-btn" onclick="sendOtp()">Send OTP</button>
     </div>
+    <div id="otp-box" style="
+    display:none;
+    background:#e8f0fe;
+    border:1px solid #4f8ef7;
+    border-radius:6px;
+    padding:14px;
+    text-align:center;
+    margin-bottom:18px;">
+    <p style="font-size:13px;color:#555;margin-bottom:6px;">Your OTP is</p>
+    <strong id="otp-display" style="
+        font-size:28px;
+        letter-spacing:8px;
+        color:#4f8ef7;
+        font-family:monospace;">
+    </strong>
+</div>
 
     <label for="otp">OTP</label>
     <input type="text" id="otp" placeholder="Enter 6-digit OTP" maxlength="6">
@@ -184,6 +200,60 @@
             errorBox.style.display = 'block';
         }
     }
+    async function sendOtp() {
+    const email      = document.getElementById('email').value.trim();
+    const errorBox   = document.getElementById('error-msg');
+    const successBox = document.getElementById('success-msg');
+
+    errorBox.style.display   = 'none';
+    successBox.style.display = 'none';
+
+    if (!email) {
+        errorBox.textContent   = 'Please enter your email first.';
+        errorBox.style.display = 'block';
+        return;
+    }
+
+    try {
+        const res  = await fetch('/api/otp_sending', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_email: email })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            // ✅ show OTP on screen and auto fill input
+            document.getElementById('otp').value          = data.otp;
+            document.getElementById('otp-display').textContent = data.otp;
+            document.getElementById('otp-box').style.display   = 'block';
+
+            successBox.textContent   = 'OTP generated! It is shown below.';
+            successBox.style.display = 'block';
+            startTimer(10 * 60);
+
+            const btn = document.getElementById('otp-btn');
+            btn.disabled = true;
+            let sec = 60;
+            const interval = setInterval(() => {
+                btn.textContent = `Resend (${sec}s)`;
+                sec--;
+                if (sec < 0) {
+                    clearInterval(interval);
+                    btn.disabled  = false;
+                    btn.textContent = 'Resend OTP';
+                }
+            }, 1000);
+        } else {
+            errorBox.textContent   = data.message || 'Failed.';
+            errorBox.style.display = 'block';
+        }
+    } catch (e) {
+        errorBox.textContent   = 'Server error. Please try again.';
+        errorBox.style.display = 'block';
+    }
+}
 </script>
 
 </body>

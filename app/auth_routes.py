@@ -147,6 +147,10 @@ def send_otp_email(email : str, otp : str):
     """
 
     mail.send(msg)
+    return jsonify({
+        "message": "OTP Generated!",
+        "otp": str(otp)
+    }), 200
 
 
 @auth_bp.route("/api/otp_sending",methods=["GET","POST"])
