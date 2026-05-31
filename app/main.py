@@ -41,6 +41,9 @@ login_manager.login_view = "login_page"
 app.register_blueprint(auth_bp)
 app.register_blueprint(post_bp)
 
+with app.app_context():
+    db.create_all()
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -69,6 +72,4 @@ def publish_page():
 def dashbord():
     return render_template("dashboard.html")
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
