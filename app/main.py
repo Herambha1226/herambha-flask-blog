@@ -11,7 +11,12 @@ from app.post_routes import post_bp
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("APP_PASSWORD")
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+
+database_url = os.getenv("DATABASE_URL", "sqlite:///blog.db")
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["MAIL_SERVER"] = os.getenv("EMAIL_SERVER")
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
