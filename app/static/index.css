@@ -1,0 +1,131 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    width: 100%;
+    min-height: 10rem; 
+    border: 2px solid black;
+}
+
+main {
+    border: 2px solid orange;
+    width: 100%;
+    flex: 1; 
+    padding: 20px;
+}
+
+footer {
+    border: 2px solid red;
+    width: 100%;
+    padding: 20px;
+}
+
+
+.navigator{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: antiquewhite;
+    font-family: 'Arial',sans-serif;
+    border-radius: 0px 0px 35px 35px;
+    box-shadow: 0px 4px 10px rgba(74, 59, 50, 0.3);
+}
+
+.navigator h4{
+    font-weight: bold;
+    font-size: 24px;
+    letter-spacing: 1px;
+    margin: 0;
+    color:#2b1a0a;
+}
+
+.navigator ul{
+    display: flex;
+    gap: 30px;
+    list-style:none;
+    margin: 0;
+    padding: 0;
+}
+
+.navigator li {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #4a3b32;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.navigator li:hover {
+    color: #8b5a2b;
+}
+
+.input-container {
+    margin: 20px 0;
+}
+
+.navigator input{
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #4a3b32;
+    background-color: #fffaf5;
+    padding: 12px 20px;
+    border: 2px solid antiquewhite;
+    border-radius: 20px; 
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.navigator input::placeholder {
+    color: #a08c80;
+    font-weight: 400;
+}
+
+.navigator input:hover {
+    border-color: #4a3b32;
+}
+
+.navigator input:focus {
+    border-color: #8b5a2b; 
+    background-color: #ffffff;
+    box-shadow: 0px 4px 8px rgba(74, 59, 50, 0.15); 
+}
+@media (max-width: 768px) {
+    .navigator {
+        flex-direction: column; 
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .navigator ul {
+        padding: 10px 0;
+    }
+}
+
+.blog-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: antiquewhite;
+    font-family: 'Arial',sans-serif;
+    border-radius: 0px 0px 35px 35px;
+    box-shadow: 0px 4px 10px rgba(74, 59, 50, 0.3);
+}
+.blog-info img{
+    width: 400rem;
+    height: 400rem;
+
+}

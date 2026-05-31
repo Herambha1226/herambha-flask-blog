@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Herambha Blogs</title>
+    <link rel="stylesheet" href="../static/login.css">
+</head>
+<body>
+
+<div class="card">
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Login to your Herambha account</p>
+
+    <div class="error" id="error-msg"></div>
+    <div class="success" id="success-msg"></div>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" placeholder="you@example.com">
+
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter your password">
+
+    <button class="btn" onclick="login()">Login</button>
+
+    <p class="msg">Don't have an account? <a href="/register">Register here</a></p>
+</div>
+
+<script>
+    window.onload = function () {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const username = localStorage.getItem("username");
+
+    const loginBtn = document.getElementById("login-btn");
+    const registerBtn = document.getElementById("register-btn");
+    const postBtn = document.getElementById("post-btn");
+    const userCircle = document.getElementById("user-circle");
+
+    if (isLoggedIn === "true") {
+        // hide login/register
+        if (loginBtn) loginBtn.style.display = "none";
+        if (registerBtn) registerBtn.style.display = "none";
+
+        // show user first letter
+        if (userCircle && username) {
+            userCircle.style.display = "inline-flex";
+            userCircle.innerText = username.charAt(0).toUpperCase();
+        }
+
+        // change post → publish
+        if (postBtn) {
+            postBtn.innerText = "Publish";
+            postBtn.href = "/publish";
+        }
+    }
+};
+    async function login() {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const errorBox = document.getElementById('error-msg');
+    const successBox = document.getElementById('success-msg');
+
+    errorBox.style.display = 'none';
+    successBox.style.display = 'none';
+
+    if (!email || !password) {
+        errorBox.textContent = 'Please fill all fields.';
+        errorBox.style.display = 'block';
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/login', {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            // ✅ ADD THIS (VERY IMPORTANT)
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("username", data.username);
+
+            successBox.textContent = data.message;
+            successBox.style.display = 'block';
+
+            setTimeout(() => window.location.href = '/', 1000);
+        } else {
+            errorBox.textContent = data.message || 'Login failed.';
+            errorBox.style.display = 'block';
+        }
+    } catch (e) {
+        errorBox.textContent = 'Server error. Please try again.';
+        errorBox.style.display = 'block';
+    }
+}
+</script>
+
+</body>
+</html>

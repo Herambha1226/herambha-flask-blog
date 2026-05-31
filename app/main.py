@@ -1,0 +1,61 @@
+import sys
+import os 
+sys.path.append(os.path.join(os.path.dirname(__file__),"app"))
+from flask import Flask,render_template
+from dotenv import load_dotenv
+load_dotenv()
+
+from extensions import db,login_manager,csrf,mail
+from auth_routes import auth_bp
+from post_routes import post_bp
+
+app = Flask(__name__)
+app.config["SECRET_KEY"] = os.getenv("APP_PASSWORD")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["MAIL_SERVER"] = os.getenv("EMAIL_SERVER")
+app.config["MAIL_PORT"] = 587
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USERNAME"] = os.getenv("EMAIL_USER")
+app.config["MAIL_PASSWORD"] = os.getenv("EMAIL_PASSWORD")
+
+db.init_app(app)
+login_manager.init_app(app)
+csrf.init_app(app)
+mail.init_app(app)
+
+login_manager.login_view = "login_page"
+
+app.register_blueprint(auth_bp)
+app.register_blueprint(post_bp)
+
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+@app.route("/blogs")
+def blogs():
+    return render_template("blog.html")
+
+@app.route("/login")
+def login_page():
+    return render_template("login.html")
+
+@app.route("/register")
+def register_page():
+    return render_template("register.html")
+
+@app.route("/post")
+def post_page():
+    return render_template("post.html")
+
+@app.route("/publish")
+def publish_page():
+    return render_template("publish.html")
+
+@app.route("/dashboard")
+def dashbord():
+    return render_template("dashboard.html")
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True)

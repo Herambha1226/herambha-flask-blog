@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post - Herambha</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        nav {
+            background: white;
+            padding: 0 40px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-logo { font-size: 20px; font-weight: bold; color: #4f8ef7; text-decoration: none; }
+
+        .nav-links a { margin-left: 20px; text-decoration: none; color: #555; font-size: 14px; }
+        .nav-links a:hover { color: #4f8ef7; }
+
+        .page-wrap {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 260px;
+            gap: 30px;
+        }
+
+        /* POST */
+        .post-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            overflow: hidden;
+        }
+
+        .post-img {
+            width: 100%;
+            height: 240px;
+            background: #e8edf5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        .post-body { padding: 28px; }
+
+        .post-tags { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+
+        .tag {
+            font-size: 11px;
+            padding: 3px 10px;
+            background: #e8f0fe;
+            color: #4f8ef7;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .post-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #111;
+            line-height: 1.35;
+            margin-bottom: 14px;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .avatar {
+            width: 32px; height: 32px;
+            background: #4f8ef7;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 12px; font-weight: bold;
+        }
+
+        .meta-dot { color: #ddd; }
+
+        .post-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #444;
+            margin-bottom: 28px;
+        }
+
+        /* LIKE */
+        .like-section {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 0;
+            border-top: 1px solid #f0f2f5;
+            border-bottom: 1px solid #f0f2f5;
+            margin-bottom: 28px;
+        }
+
+        .like-btn {
+            padding: 8px 20px;
+            background: white;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .like-btn:hover { border-color: #e74c3c; color: #e74c3c; }
+        .like-btn.liked { background: #fff0f0; border-color: #e74c3c; color: #e74c3c; }
+
+        .like-count { font-size: 14px; color: #777; }
+
+        /* COMMENTS */
+        .comments-section h3 {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 18px;
+            color: #222;
+        }
+
+        .comment-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .comment-item:last-child { border-bottom: none; }
+
+        .comment-av {
+            width: 34px; height: 34px;
+            background: #aaa;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 11px; font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .comment-body {}
+        .comment-author { font-size: 13px; font-weight: bold; color: #333; margin-bottom: 3px; }
+        .comment-date { font-size: 11px; color: #bbb; margin-bottom: 5px; }
+        .comment-text { font-size: 14px; color: #555; line-height: 1.5; }
+
+        /* ADD COMMENT */
+        .add-comment { margin-top: 24px; }
+        .add-comment h4 { font-size: 15px; margin-bottom: 14px; color: #333; }
+
+        .add-comment input,
+        .add-comment textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            outline: none;
+            font-family: Arial, sans-serif;
+        }
+
+        .add-comment input:focus,
+        .add-comment textarea:focus { border-color: #4f8ef7; }
+
+        .add-comment textarea { height: 90px; resize: vertical; }
+
+        .btn-submit {
+            padding: 10px 24px;
+            background: #4f8ef7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover { background: #3a7ae0; }
+
+        .error { background: #fff0f0; color: #d32f2f; border: 1px solid #ffcdd2; padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 12px; display: none; }
+        .success { background: #f0fff4; color: #2e7d32; border: 1px solid #c8e6c9; padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 12px; display: none; }
+
+        /* SIDEBAR */
+        .sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+        .sidebar-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+        }
+
+        .sidebar-box h3 {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f2f5;
+        }
+
+        .related-item {
+            display: flex;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .related-item:last-child { border-bottom: none; }
+
+        .related-title { font-size: 13px; color: #333; line-height: 1.4; }
+        .related-date { font-size: 11px; color: #aaa; margin-top: 3px; }
+
+        .loading { text-align: center; padding: 40px; color: #aaa; }
+
+        @media (max-width: 768px) {
+            .page-wrap { grid-template-columns: 1fr; }
+            nav { padding: 0 16px; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">Herambha</a>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/blogs">Blogs</a>
+        <a href="/login"    id="login-link">Login</a>
+        <a href="/register" id="register-link">Register</a>
+        <a href="/publish"  id="publish-link"  style="display:none">Publish</a>
+        <a href="#"         id="logout-link"   style="display:none" onclick="logoutUser()">Logout</a>
+        <div id="user-circle" style="
+            display:none; width:32px; height:32px; border-radius:50%;
+            background:#4f8ef7; color:white; font-weight:bold;
+            align-items:center; justify-content:center;
+            font-size:14px; margin-left:8px;
+        "></div>
+    </div>
+</nav>
+
+<div class="page-wrap">
+
+    <!-- POST -->
+    <main>
+        <div id="post-wrap">
+            <div class="loading">Loading post...</div>
+        </div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-box">
+            <h3>All Posts</h3>
+            <div id="related-posts"></div>
+        </div>
+    </aside>
+
+</div>
+
+<script src="/static/navbar.js"></script>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const postId = params.get('id');
+    let liked = false;
+
+    async function loadPost() {
+        if (!postId) {
+            document.getElementById('post-wrap').innerHTML = '<div class="loading">No post ID found.</div>';
+            return;
+        }
+        try {
+            const res = await fetch(`/api/post/${postId}`);
+            const post = await res.json();
+            renderPost(post);
+            loadComments();
+            loadRelated();
+        } catch {
+            document.getElementById('post-wrap').innerHTML = '<div class="loading">Could not load post.</div>';
+        }
+    }
+
+    function initials(name) {
+        return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    function renderPost(post) {
+        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        document.title = post.title + ' - Herambha';
+
+        // show comment box only if logged in
+        const commentBox = isLoggedIn ? `
+            <div class="add-comment">
+                <h4>Leave a comment</h4>
+                <div class="error" id="comment-error"></div>
+                <div class="success" id="comment-success"></div>
+                <textarea id="comment-text" placeholder="Write your comment..."></textarea>
+                <button class="btn-submit" onclick="addComment()">Post Comment</button>
+            </div>` :
+            `<p style="color:#aaa;font-size:13px;margin-top:16px;">
+                <a href="/login" style="color:#4f8ef7;">Login</a> to leave a comment.
+            </p>`;
+
+        // show like only if logged in
+        const likeSection = isLoggedIn ? `
+            <div class="like-section">
+                <button class="like-btn" id="like-btn" onclick="toggleLike()">❤️ Like</button>
+                <span class="like-count" id="like-count">${post.likes} likes</span>
+            </div>` :
+            `<div class="like-section">
+                <span style="font-size:13px;color:#aaa;">❤️ ${post.likes} likes &nbsp;·&nbsp;
+                <a href="/login" style="color:#4f8ef7;">Login to like</a></span>
+            </div>`;
+
+        document.getElementById('post-wrap').innerHTML = `
+            <div class="post-card">
+                <div class="post-img">No Image</div>
+                <div class="post-body">
+                    <div class="post-tags">
+                        ${(post.tags || []).map(t => `<span class="tag">${t}</span>`).join('')}
+                    </div>
+                    <div class="post-title">${post.title}</div>
+                    <div class="post-meta">
+                        <div class="avatar">${initials(post.author)}</div>
+                        <span><strong>${post.author}</strong></span>
+                        <span class="meta-dot">•</span>
+                        <span>${String(post.date).slice(0, 10)}</span>
+                        <span class="meta-dot">•</span>
+                        <span>💬 ${post.comments} comments</span>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                    ${likeSection}
+                    <div class="comments-section">
+                        <h3>Comments</h3>
+                        <div id="comments-list"></div>
+                        ${commentBox}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    async function loadComments() {
+        try {
+            const res = await fetch(`/api/post/${postId}/comments`);
+            const comments = await res.json();
+            const list = document.getElementById('comments-list');
+            if (!list) return;
+            if (!comments.length) {
+                list.innerHTML = '<p style="color:#aaa;font-size:13px;margin-bottom:16px;">No comments yet. Be the first!</p>';
+                return;
+            }
+            list.innerHTML = comments.map(c => `
+                <div class="comment-item">
+                    <div class="comment-av">${initials(c.author)}</div>
+                    <div class="comment-body">
+                        <div class="comment-author">${c.author}</div>
+                        <div class="comment-date">${String(c.date).slice(0, 10)}</div>
+                        <div class="comment-text">${c.comment}</div>
+                    </div>
+                </div>
+            `).join('');
+        } catch {}
+    }
+
+    async function addComment() {
+        const comment = document.getElementById('comment-text').value.trim();
+        const errorEl  = document.getElementById('comment-error');
+        const successEl = document.getElementById('comment-success');
+
+        errorEl.style.display = 'none';
+        successEl.style.display = 'none';
+
+        if (!comment) {
+            errorEl.textContent = 'Please write a comment.';
+            errorEl.style.display = 'block';
+            return;
+        }
+
+        try {
+            const res = await fetch(`/api/post/${postId}/comment`, {
+                method: 'POST',
+                credentials: 'include',          // 👈 sends Flask session cookie
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ comment }) // backend uses current_user.username
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                successEl.textContent = data.message;
+                successEl.style.display = 'block';
+                document.getElementById('comment-text').value = '';
+                loadComments();
+            } else {
+                errorEl.textContent = data.message || 'Failed to post comment.';
+                errorEl.style.display = 'block';
+            }
+        } catch {
+            errorEl.textContent = 'Server error.';
+            errorEl.style.display = 'block';
+        }
+    }
+
+    async function toggleLike() {
+        const btn     = document.getElementById('like-btn');
+        const countEl = document.getElementById('like-count');
+
+        if (!liked) {
+            try {
+                const res = await fetch(`/api/post/${postId}/like`, {
+                    method: 'POST',
+                    credentials: 'include',  // 👈 sends Flask session — uses current_user
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    liked = true;
+                    btn.classList.add('liked');
+                    btn.textContent = '❤️ Liked';
+                    const cur = parseInt(countEl.textContent);
+                    countEl.textContent = (cur + 1) + ' likes';
+                } else {
+                    alert(data.message); // shows "Already liked" if needed
+                }
+            } catch {}
+        } else {
+            try {
+                const res = await fetch(`/api/post/${postId}/unlike`, {
+                    method: 'POST',
+                    credentials: 'include',  // 👈 sends Flask session
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (res.ok) {
+                    liked = false;
+                    btn.classList.remove('liked');
+                    btn.textContent = '❤️ Like';
+                    const cur = parseInt(countEl.textContent);
+                    countEl.textContent = Math.max(0, cur - 1) + ' likes';
+                }
+            } catch {}
+        }
+    }
+
+    async function loadRelated() {
+        try {
+            const res = await fetch('/api/all_posts');
+            const posts = await res.json();
+            const others = posts.filter(p => String(p.id) !== String(postId)).slice(0, 5);
+            document.getElementById('related-posts').innerHTML = others.map(p => `
+                <a class="related-item" href="/post?id=${p.id}">
+                    <div>
+                        <div class="related-title">${p.title}</div>
+                        <div class="related-date">${String(p.date).slice(0, 10)}</div>
+                    </div>
+                </a>
+            `).join('');
+        } catch {}
+    }
+
+    loadPost();
+</script>
+
+</body>
+</html>

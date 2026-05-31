@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Herambha</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        /* ── NAVBAR ── */
+        nav {
+            background: white;
+            padding: 0 40px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-logo { font-size: 20px; font-weight: bold; color: #4f8ef7; text-decoration: none; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { text-decoration: none; color: #555; font-size: 14px; }
+        .nav-links a:hover { color: #4f8ef7; }
+
+        .user-circle {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: #4f8ef7; color: white; font-weight: bold;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 14px; cursor: default;
+        }
+
+        /* ── PAGE ── */
+        .page-wrap {
+            max-width: 1100px;
+            margin: 36px auto;
+            padding: 0 20px;
+        }
+
+        /* ── PROFILE HEADER ── */
+        .profile-header {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            padding: 28px 32px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .profile-avatar {
+            width: 72px; height: 72px; border-radius: 50%;
+            background: #4f8ef7;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; font-weight: bold; color: white;
+            flex-shrink: 0;
+        }
+
+        .profile-info h2 { font-size: 22px; color: #111; margin-bottom: 4px; }
+        .profile-info p  { font-size: 14px; color: #888; }
+
+        .profile-actions { margin-left: auto; display: flex; gap: 10px; }
+
+        .btn {
+            padding: 9px 20px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-primary { background: #4f8ef7; color: white; }
+        .btn-primary:hover { background: #3a7ae0; }
+
+        .btn-danger  { background: #fff0f0; color: #d32f2f; border: 1px solid #ffcdd2; }
+        .btn-danger:hover  { background: #ffcdd2; }
+
+        /* ── STAT CARDS ── */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px 24px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-icon {
+            width: 46px; height: 46px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0;
+        }
+
+        .stat-icon.blue   { background: #e8f0fe; }
+        .stat-icon.red    { background: #fff0f0; }
+        .stat-icon.green  { background: #f0fff4; }
+        .stat-icon.yellow { background: #fffbea; }
+
+        .stat-num  { font-size: 26px; font-weight: bold; color: #111; line-height: 1; }
+        .stat-label { font-size: 12px; color: #888; margin-top: 3px; }
+
+        /* ── TABS ── */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 6px;
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            width: fit-content;
+        }
+
+        .tab-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            background: transparent;
+            color: #888;
+            transition: all 0.15s;
+        }
+
+        .tab-btn.active { background: #4f8ef7; color: white; }
+        .tab-btn:hover:not(.active) { background: #f0f2f5; color: #333; }
+
+        /* ── SECTION ── */
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* ── POST CARDS ── */
+        .posts-list { display: flex; flex-direction: column; gap: 16px; }
+
+        .post-row {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            padding: 20px 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .post-row-body { flex: 1; }
+
+        .post-row-title {
+            font-size: 16px; font-weight: bold; color: #111;
+            margin-bottom: 6px; text-decoration: none;
+        }
+
+        .post-row-title:hover { color: #4f8ef7; }
+
+        .post-row-excerpt {
+            font-size: 13px; color: #777; line-height: 1.5;
+            margin-bottom: 10px;
+            display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
+
+        .post-row-meta {
+            display: flex; gap: 16px; font-size: 12px; color: #aaa;
+            align-items: center;
+        }
+
+        .meta-chip {
+            display: flex; align-items: center; gap: 4px;
+        }
+
+        .tag {
+            font-size: 11px; padding: 2px 8px;
+            background: #e8f0fe; color: #4f8ef7;
+            border-radius: 20px; font-weight: bold;
+        }
+
+        .post-row-actions {
+            display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+        }
+
+        .btn-sm {
+            padding: 5px 14px; font-size: 12px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; border: none; text-decoration: none;
+        }
+
+        .btn-sm-edit   { background: #e8f0fe; color: #4f8ef7; }
+        .btn-sm-edit:hover   { background: #d0e3ff; }
+        .btn-sm-delete { background: #fff0f0; color: #d32f2f; }
+        .btn-sm-delete:hover { background: #ffcdd2; }
+
+        /* ── COMMENT CARDS ── */
+        .comment-row {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            padding: 16px 20px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .comment-av {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #4f8ef7; color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: bold; flex-shrink: 0;
+        }
+
+        .comment-post-title {
+            font-size: 12px; color: #aaa; margin-bottom: 4px;
+        }
+
+        .comment-post-title a { color: #4f8ef7; text-decoration: none; }
+        .comment-text { font-size: 14px; color: #444; line-height: 1.5; margin-bottom: 4px; }
+        .comment-date { font-size: 11px; color: #bbb; }
+
+        /* ── EMPTY ── */
+        .empty {
+            text-align: center; padding: 60px 20px;
+            color: #bbb;
+        }
+
+        .empty h3 { font-size: 18px; margin-bottom: 8px; color: #ccc; }
+        .empty p  { font-size: 14px; }
+
+        /* ── LOADING ── */
+        .loading { text-align: center; padding: 40px; color: #aaa; font-size: 14px; }
+
+        /* ── NOT LOGGED IN ── */
+        .not-logged {
+            text-align: center; padding: 80px 20px;
+        }
+
+        .not-logged h2 { font-size: 22px; color: #333; margin-bottom: 12px; }
+        .not-logged p  { font-size: 14px; color: #888; margin-bottom: 24px; }
+
+        /* ── MODAL (delete confirm) ── */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.35);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 100; display: none;
+        }
+
+        .modal-box {
+            background: white; border-radius: 12px;
+            padding: 28px 32px; width: 360px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        }
+
+        .modal-box h3 { font-size: 17px; margin-bottom: 10px; color: #111; }
+        .modal-box p  { font-size: 14px; color: #777; margin-bottom: 22px; }
+
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+        @media (max-width: 768px) {
+            .stats-row { grid-template-columns: 1fr 1fr; }
+            nav { padding: 0 16px; }
+            .profile-header { flex-wrap: wrap; }
+            .profile-actions { margin-left: 0; }
+            .post-row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <a href="/" class="nav-logo">Herambha</a>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/blogs">Blogs</a>
+        <a href="/login"    id="login-link">Login</a>
+        <a href="/register" id="register-link">Register</a>
+        <a href="/publish"  id="publish-link"  style="display:none">Publish</a>
+        <a href="#"         id="logout-link"   style="display:none" onclick="logoutUser()">Logout</a>
+        <div id="user-circle" class="user-circle" style="display:none"></div>
+    </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page-wrap" id="main-content">
+    <div class="loading">Loading dashboard...</div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="delete-modal">
+    <div class="modal-box">
+        <h3>Delete Post</h3>
+        <p>Are you sure you want to delete this post? This cannot be undone.</p>
+        <div class="modal-actions">
+            <button class="btn btn-danger" onclick="confirmDelete()">Yes, Delete</button>
+            <button class="btn" style="background:#f0f2f5;color:#555" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="/static/navbar.js"></script>
+<script>
+    const username = localStorage.getItem("username") || "";
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    let deletePostId = null;
+    let allPosts = [];
+
+    // ── INIT ──
+    window.addEventListener("DOMContentLoaded", () => {
+        if (!isLoggedIn || !username) {
+            document.getElementById("main-content").innerHTML = `
+                <div class="not-logged">
+                    <h2>You are not logged in</h2>
+                    <p>Please login to see your dashboard.</p>
+                    <a href="/login" class="btn btn-primary">Go to Login</a>
+                </div>`;
+            return;
+        }
+        buildDashboard();
+        loadDashboardData();
+    });
+
+    // ── BUILD HTML STRUCTURE ──
+    function buildDashboard() {
+        document.getElementById("main-content").innerHTML = `
+
+            <!-- PROFILE HEADER -->
+            <div class="profile-header">
+                <div class="profile-avatar" id="profile-avatar">
+                    ${username.charAt(0).toUpperCase()}
+                </div>
+                <div class="profile-info">
+                    <h2 id="profile-name">${username}</h2>
+                    <p>Member · Herambha Blogs</p>
+                </div>
+                <div class="profile-actions">
+                    <a href="/publish" class="btn btn-primary">+ New Post</a>
+                    <button class="btn btn-danger" onclick="logoutUser()">Logout</button>
+                </div>
+            </div>
+
+            <!-- STAT CARDS -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon blue">📝</div>
+                    <div>
+                        <div class="stat-num" id="stat-posts">–</div>
+                        <div class="stat-label">Total Posts</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red">❤️</div>
+                    <div>
+                        <div class="stat-num" id="stat-likes">–</div>
+                        <div class="stat-label">Total Likes</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">💬</div>
+                    <div>
+                        <div class="stat-num" id="stat-comments">–</div>
+                        <div class="stat-label">Total Comments</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow">🏷️</div>
+                    <div>
+                        <div class="stat-num" id="stat-tags">–</div>
+                        <div class="stat-label">Tags Used</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABS -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('posts', this)">My Posts</button>
+                <button class="tab-btn" onclick="switchTab('comments', this)">Comments on My Posts</button>
+                <button class="tab-btn" onclick="switchTab('liked', this)">Most Liked</button>
+            </div>
+
+            <!-- POSTS TAB -->
+            <div class="section active" id="tab-posts">
+                <div class="posts-list" id="posts-list">
+                    <div class="loading">Loading posts...</div>
+                </div>
+            </div>
+
+            <!-- COMMENTS TAB -->
+            <div class="section" id="tab-comments">
+                <div class="posts-list" id="comments-list">
+                    <div class="loading">Loading comments...</div>
+                </div>
+            </div>
+
+            <!-- MOST LIKED TAB -->
+            <div class="section" id="tab-liked">
+                <div class="posts-list" id="liked-list">
+                    <div class="loading">Loading...</div>
+                </div>
+            </div>
+        `;
+    }
+
+    // ── LOAD DATA ──
+    async function loadDashboardData() {
+        try {
+            const res = await fetch(`/api/user/${username}/posts`, {
+                credentials: 'include'
+            });
+
+            if (res.status === 401) {
+                document.getElementById("posts-list").innerHTML =
+                    '<div class="empty"><h3>Session expired</h3><p><a href="/login">Login again</a></p></div>';
+                return;
+            }
+
+            console.log("Status:", res.status);      // 👈 check this in browser console
+            const data = await res.json();
+            console.log("Data:", data);
+
+            if (!Array.isArray(data)) {
+                document.getElementById("posts-list").innerHTML =
+                    '<div class="empty"><h3>No posts yet</h3><p>Write your first post!</p></div>';
+                updateStats(0, 0, 0, 0);
+                return;
+            }
+
+            allPosts = data;
+
+            // update stat cards
+            const totalLikes    = data.reduce((s, p) => s + (p.likes    || 0), 0);
+            const totalComments = data.reduce((s, p) => s + (p.comments || 0), 0);
+            const allTags = [...new Set(data.flatMap(p => p.tags || []))];
+            updateStats(data.length, totalLikes, totalComments, allTags.length);
+
+            // render posts tab
+            renderPosts(data);
+
+            // render comments tab
+            renderComments(data);
+
+            // render most liked tab
+            const sorted = [...data].sort((a, b) => (b.likes || 0) - (a.likes || 0));
+            renderLiked(sorted);
+
+        } catch (e) {
+            document.getElementById("posts-list").innerHTML =
+                '<div class="empty"><h3>Could not load data</h3><p>Make sure the server is running.</p></div>';
+        }
+    }
+
+    function updateStats(posts, likes, comments, tags) {
+        document.getElementById("stat-posts").textContent    = posts;
+        document.getElementById("stat-likes").textContent    = likes;
+        document.getElementById("stat-comments").textContent = comments;
+        document.getElementById("stat-tags").textContent     = tags;
+    }
+
+    // ── RENDER POSTS ──
+    function renderPosts(posts) {
+        const el = document.getElementById("posts-list");
+        if (!posts.length) {
+            el.innerHTML = `
+                <div class="empty">
+                    <h3>No posts yet</h3>
+                    <p>You haven't published anything. <a href="/publish" style="color:#4f8ef7">Write your first post!</a></p>
+                </div>`;
+            return;
+        }
+
+        el.innerHTML = posts.map(p => `
+            <div class="post-row">
+                <div class="post-row-body">
+                    <a class="post-row-title" href="/post?id=${p.id}">${p.title}</a>
+                    <div class="post-row-excerpt">${p.content}</div>
+                    <div class="post-row-meta">
+                        <span class="meta-chip">❤️ ${p.likes} likes</span>
+                        <span class="meta-chip">💬 ${p.comments} comments</span>
+                        <span class="meta-chip">📅 ${String(p.date || '').slice(0, 10)}</span>
+                        <span style="display:flex;gap:4px;flex-wrap:wrap;">
+                            ${(p.tags || []).slice(0, 3).map(t => `<span class="tag">${t}</span>`).join('')}
+                        </span>
+                    </div>
+                </div>
+                <div class="post-row-actions">
+                    <a href="/post?id=${p.id}" class="btn-sm btn-sm-edit">View</a>
+                    <button class="btn-sm btn-sm-delete" onclick="openDeleteModal(${p.id})">Delete</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ── RENDER COMMENTS ──
+    async function renderComments(posts) {
+        const el = document.getElementById("comments-list");
+        el.innerHTML = '<div class="loading">Loading comments...</div>';
+
+        let allComments = [];
+
+        // fetch comments for each post
+        for (const p of posts) {
+            try {
+                const res = await fetch(`/api/post/${p.id}/comments`);
+                const comments = await res.json();
+                if (Array.isArray(comments)) {
+                    comments.forEach(c => {
+                        allComments.push({ ...c, post_title: p.title, post_id: p.id });
+                    });
+                }
+            } catch {}
+        }
+
+        if (!allComments.length) {
+            el.innerHTML = '<div class="empty"><h3>No comments yet</h3><p>No one has commented on your posts yet.</p></div>';
+            return;
+        }
+
+        el.innerHTML = allComments.map(c => `
+            <div class="comment-row">
+                <div class="comment-av">${initials(c.author)}</div>
+                <div>
+                    <div class="comment-post-title">
+                        On: <a href="/post?id=${c.post_id}">${c.post_title}</a>
+                    </div>
+                    <div class="comment-text">${c.comment}</div>
+                    <div class="comment-date">By ${c.author} · ${String(c.date || '').slice(0, 10)}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ── RENDER MOST LIKED ──
+    function renderLiked(posts) {
+        const el = document.getElementById("liked-list");
+        if (!posts.length) {
+            el.innerHTML = '<div class="empty"><h3>No posts yet</h3></div>';
+            return;
+        }
+
+        el.innerHTML = posts.map((p, i) => `
+            <div class="post-row">
+                <div style="
+                    width:36px; height:36px; border-radius:8px;
+                    background:${i === 0 ? '#fffbea' : i === 1 ? '#f5f5f5' : '#fff0f0'};
+                    display:flex; align-items:center; justify-content:center;
+                    font-size:18px; flex-shrink:0;">
+                    ${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`}
+                </div>
+                <div class="post-row-body">
+                    <a class="post-row-title" href="/post?id=${p.id}">${p.title}</a>
+                    <div class="post-row-meta" style="margin-top:6px">
+                        <span class="meta-chip">❤️ ${p.likes} likes</span>
+                        <span class="meta-chip">💬 ${p.comments} comments</span>
+                        <span class="meta-chip">📅 ${String(p.date || '').slice(0, 10)}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ── TABS ──
+    function switchTab(name, btn) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`tab-${name}`).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // ── DELETE ──
+    function openDeleteModal(postId) {
+        deletePostId = postId;
+        document.getElementById('delete-modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        deletePostId = null;
+        document.getElementById('delete-modal').style.display = 'none';
+    }
+
+    async function confirmDelete() {
+    if (!deletePostId) return;
+    try {
+        const res = await fetch(`/api/post_del/${deletePostId}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+
+        if (res.ok) {
+            const deletedId = deletePostId;  // 👈 save before reset
+            closeModal();
+
+            allPosts = allPosts.filter(p => p.id !== deletedId);  // 👈 use saved id
+            renderPosts(allPosts);
+
+            const totalLikes    = allPosts.reduce((s, p) => s + (p.likes    || 0), 0);
+            const totalComments = allPosts.reduce((s, p) => s + (p.comments || 0), 0);
+            const allTags       = [...new Set(allPosts.flatMap(p => p.tags || []))];
+            updateStats(allPosts.length, totalLikes, totalComments, allTags.length);
+        } else {
+            const data = await res.json();
+            alert(data.message || 'Delete failed.');  // 👈 shows error message
+        }
+    } catch {
+        alert('Server error. Try again.');
+    }
+}
+    // ── HELPERS ──
+    function initials(name) {
+        return (name || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    async function logoutUser() {
+        try {
+            await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+        } catch {}
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("username");
+        window.location.href = "/";
+    }
+</script>
+
+</body>
+</html>

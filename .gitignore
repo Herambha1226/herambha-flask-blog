@@ -1,0 +1,12 @@
+# cache files 
+__pycache__
+
+# flask local storage (means db)
+instance
+
+# virtual environment
+venv
+
+# environment variables files 
+.env 
+

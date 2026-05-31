@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herambha - Discover Stories & Insights</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        /* NAVBAR */
+        nav {
+            background: white;
+            padding: 0 40px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4f8ef7;
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover { color: #4f8ef7; }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-right input {
+            padding: 7px 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 13px;
+            outline: none;
+            width: 180px;
+        }
+
+        .nav-right input:focus { border-color: #4f8ef7; }
+
+        .btn-nav {
+            padding: 7px 16px;
+            background: #4f8ef7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-nav:hover { background: #3a7ae0; }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, #4f8ef7 0%, #2a6edb 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 16px;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .btn-hero {
+            padding: 12px 30px;
+            background: white;
+            color: #4f8ef7;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-block;
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+        /* MAIN CONTENT LAYOUT */
+        .page-wrap {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .view-all {
+            font-size: 14px;
+            color: #4f8ef7;
+            text-decoration: none;
+            font-weight: normal;
+        }
+
+        .view-all:hover { text-decoration: underline; }
+
+        /* FEATURED POST GRID */
+        .featured-wrapper {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .featured-main {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.2s;
+        }
+
+        .featured-main:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+
+        .featured-img-placeholder {
+            height: 280px;
+            background: #e8edf5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 16px;
+        }
+
+        /* SIDEBAR / MINI CARDS */
+        .featured-side {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mini-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.2s;
+        }
+
+        .mini-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+
+        /* REUSED STYLES FROM BLOGS PAGE */
+        .blog-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); gap: 20px; margin-bottom: 40px; }
+
+        .blog-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            display: flex;
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.2s;
+        }
+
+        .blog-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+
+        .card-thumb {
+            width: 200px;
+            min-height: 140px;
+            background: #e8edf5;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        .card-body { padding: 20px; flex: 1; }
+        .card-tags { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+        
+        .tag {
+            font-size: 11px;
+            padding: 3px 10px;
+            background: #e8f0fe;
+            color: #4f8ef7;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .card-title.large { font-size: 22px; }
+
+        .card-excerpt {
+            font-size: 13px;
+            color: #777;
+            line-height: 1.6;
+            margin-bottom: 14px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .avatar {
+            width: 24px; height: 24px;
+            background: #4f8ef7;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 10px; font-weight: bold;
+        }
+
+        .meta-dot { color: #ddd; }
+
+        /* LOADING & EMPTY */
+        .loading { text-align: center; padding: 40px; color: #aaa; font-size: 14px; }
+        .empty { text-align: center; padding: 40px; color: #aaa; }
+
+        /* FOOTER */
+        footer {
+            background: white;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            border-top: 1px solid #e8edf5;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            nav { padding: 0 16px; }
+            .hero h1 { font-size: 30px; }
+            .hero p { font-size: 15px; }
+            .featured-wrapper { grid-template-columns: 1fr; }
+            .card-thumb { display: none; }
+            .blog-card { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">Herambha</a>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/blogs">Blogs</a>
+        <a href="/login">Login</a>
+        <a href="/publish">post</a>
+       <!-- replace your div with this -->
+        <a id="user-circle" href="/dashboard" style="
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #4f8ef7;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 15px;
+            margin-left: 10px;
+        "></a>
+    </div>
+    <div class="nav-right">
+        <input type="search" id="search-input" placeholder="Search posts...">
+        <a href="/register" class="btn-nav">Register</a>
+        <!-- <a href="#" id="logout-btn" onclick="logout()">Logout</a> -->
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Welcome to Herambha</h1>
+        <p>Explore thought-provoking articles, tutorials, and insights from our community of developers and writers.</p>
+        <a href="/blogs" class="btn-hero">Start Reading</a>
+    </div>
+</section>
+
+<div class="page-wrap">
+
+    <h2 class="section-title">Featured Highlights</h2>
+    <div class="featured-wrapper" id="featured-section">
+        <div id="main-featured">
+            <div class="loading">Loading featured post...</div>
+        </div>
+        <div class="featured-side" id="side-featured">
+             </div>
+    </div>
+
+    <div class="section-title">
+        <span>Latest Articles</span>
+        <a href="/blogs" class="view-all">View All Posts &rarr;</a>
+    </div>
+    
+    <main>
+        <div class="blog-list" id="latest-posts">
+            <div class="loading">Loading latest articles...</div>
+        </div>
+    </main>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Herambha. All rights reserved.</p>
+</footer>
+
+<script>
+    window.onload = function () {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const username = localStorage.getItem("username");
+
+    const loginBtn = document.getElementById("login-btn");
+    const registerBtn = document.getElementById("register-btn");
+    const postBtn = document.getElementById("post-btn");
+    const userCircle = document.getElementById("user-circle");
+
+    if (isLoggedIn === "true") {
+        // hide login/register
+        if (loginBtn) loginBtn.style.display = "none";
+        if (registerBtn) registerBtn.style.display = "none";
+
+        // show user first letter
+        if (userCircle && username) {
+            userCircle.style.display = "inline-flex";
+            userCircle.innerText = username.charAt(0).toUpperCase();
+        }
+
+        // change post → publish
+        if (postBtn) {
+            postBtn.innerText = "Publish";
+            postBtn.href = "/publish";
+        }
+    }
+};
+    async function loadHomeData() {
+        try {
+            const res = await fetch('/api/all_posts');
+            const posts = await res.json();
+            
+            if (posts && posts.length > 0) {
+                renderFeatured(posts);
+                renderLatest(posts.slice(0, 3)); // Display top 3 items on Home page
+            } else {
+                showEmptyStates();
+            }
+        } catch {
+            showErrorStates();
+        }
+    }
+
+    function initials(name) {
+        return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    function renderFeatured(posts) {
+        const mainFeaturedWrap = document.getElementById('main-featured');
+        const sideFeaturedWrap = document.getElementById('side-featured');
+        
+        // Use 1st post for main hero card
+        const mainPost = posts[0];
+        mainFeaturedWrap.innerHTML = `
+            <a class="featured-main" href="/post?id=${mainPost.id}">
+                <div class="featured-img-placeholder">Featured Post</div>
+                <div class="card-body">
+                    <div class="card-tags">
+                        ${(mainPost.tags || []).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
+                    </div>
+                    <div class="card-title large">${mainPost.title}</div>
+                    <div class="card-excerpt">${mainPost.content}</div>
+                    <div class="card-meta">
+                        <div class="avatar">${initials(mainPost.author)}</div>
+                        <span>${mainPost.author}</span>
+                        <span class="meta-dot">•</span>
+                        <span>${String(mainPost.date).slice(0, 10)}</span>
+                    </div>
+                </div>
+            </a>
+        `;
+
+        // Use next 2 posts for side column mini layouts
+        const sidePosts = posts.slice(1, 3);
+        if(sidePosts.length > 0) {
+            sideFeaturedWrap.innerHTML = sidePosts.map(p => `
+                <a class="mini-card" href="/post?id=${p.id}">
+                    <div class="card-tags">
+                        ${(p.tags || []).slice(0,2).map(t => `<span class="tag">${t}</span>`).join('')}
+                    </div>
+                    <div class="card-title" style="font-size:15px; margin-bottom:5px;">${p.title}</div>
+                    <div class="card-meta">
+                        <span>By ${p.author}</span>
+                        <span class="meta-dot">•</span>
+                        <span>❤️ ${p.likes}</span>
+                    </div>
+                </a>
+            `).join('');
+        } else {
+            sideFeaturedWrap.innerHTML = '<div class="empty">More highlights coming soon!</div>';
+        }
+    }
+
+    function renderLatest(posts) {
+        const list = document.getElementById('latest-posts');
+        
+        list.innerHTML = posts.map(p => `
+            <a class="blog-card" href="/post?id=${p.id}">
+                <div class="card-thumb">No Image</div>
+                <div class="card-body">
+                    <div class="card-tags">
+                        ${(p.tags || []).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
+                    </div>
+                    <div class="card-title">${p.title}</div>
+                    <div class="card-excerpt">${p.content}</div>
+                    <div class="card-meta">
+                        <div class="avatar">${initials(p.author)}</div>
+                        <span>${p.author}</span>
+                        <span class="meta-dot">•</span>
+                        <span>${String(p.date).slice(0, 10)}</span>
+                        <span class="meta-dot">•</span>
+                        <span>❤️ ${p.likes}</span>
+                        <span class="meta-dot">•</span>
+                        <span>💬 ${p.comments}</span>
+                    </div>
+                </div>
+            </a>
+        `).join('');
+    }
+
+    function showEmptyStates() {
+        document.getElementById('featured-section').style.display = 'none';
+        document.getElementById('latest-posts').innerHTML = '<div class="empty"><h3>No posts found</h3><p>Check back later!</p></div>';
+    }
+
+    function showErrorStates() {
+        document.getElementById('main-featured').innerHTML = '';
+        document.getElementById('latest-posts').innerHTML = '<div class="empty"><h3>Could not load posts</h3><p>Make sure your server backend is running.</p></div>';
+    }
+
+    // Search redirect feature (Redirects home page search criteria directly to the blogs.html page)
+    document.getElementById('search-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+            const q = e.target.value.trim();
+            if (q) {
+                window.location.href = `/blogs?search=${encodeURIComponent(q)}`;
+            }
+        }
+    });
+
+    loadHomeData();
+    async function logout() {
+    try {
+        await fetch('/api/logout', {
+            method: 'POST',
+            credentials: 'include'
+        });
+
+        // ✅ clear frontend state
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("username");
+
+        // redirect
+        window.location.href = "/";
+    } catch (e) {
+        console.log("Logout failed");
+    }
+}
+</script>
+
+</body>
+</html>

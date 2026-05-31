@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Blogs - Herambha</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        /* NAVBAR */
+        nav {
+            background: white;
+            padding: 0 40px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4f8ef7;
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover { color: #4f8ef7; }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-right input {
+            padding: 7px 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 13px;
+            outline: none;
+            width: 180px;
+        }
+
+        .nav-right input:focus { border-color: #4f8ef7; }
+
+        .btn-nav {
+            padding: 7px 16px;
+            background: #4f8ef7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-nav:hover { background: #3a7ae0; }
+
+        /* PAGE */
+        .page-wrap {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 30px;
+        }
+
+        /* BLOG CARDS */
+        .blog-list { display: flex; flex-direction: column; gap: 20px; }
+
+        .blog-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+            display: flex;
+            gap: 0;
+            text-decoration: none;
+            color: inherit;
+            transition: box-shadow 0.2s;
+        }
+
+        .blog-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+
+        .card-thumb {
+            width: 200px;
+            min-height: 140px;
+            background: #e8edf5;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        .card-body {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .card-tags { display: flex; gap: 6px; margin-bottom: 8px; flex-wrap: wrap; }
+
+        .tag {
+            font-size: 11px;
+            padding: 3px 10px;
+            background: #e8f0fe;
+            color: #4f8ef7;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .card-title {
+            font-size: 17px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .card-excerpt {
+            font-size: 13px;
+            color: #777;
+            line-height: 1.6;
+            margin-bottom: 14px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .avatar {
+            width: 24px; height: 24px;
+            background: #4f8ef7;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 10px; font-weight: bold;
+        }
+
+        .meta-dot { color: #ddd; }
+
+        /* SIDEBAR */
+        .sidebar { display: flex; flex-direction: column; gap: 24px; }
+
+        .sidebar-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+        }
+
+        .sidebar-box h3 {
+            font-size: 15px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f2f5;
+        }
+
+        .tag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+
+        .tag-pill {
+            padding: 5px 12px;
+            background: #f0f2f5;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #555;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .tag-pill:hover { background: #e8f0fe; color: #4f8ef7; }
+
+        .trending-item {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f2f5;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .trending-item:last-child { border-bottom: none; }
+
+        .trend-num {
+            width: 24px; height: 24px;
+            background: #f0f2f5;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: bold; color: #4f8ef7;
+            flex-shrink: 0;
+        }
+
+        .trend-title {
+            font-size: 13px; color: #333; line-height: 1.4;
+            display: -webkit-box; -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
+
+        /* LOADING */
+        .loading {
+            text-align: center; padding: 40px;
+            color: #aaa; font-size: 14px;
+        }
+
+        /* EMPTY */
+        .empty {
+            text-align: center; padding: 60px 20px;
+            color: #aaa;
+        }
+
+        .empty h3 { font-size: 18px; margin-bottom: 8px; }
+
+        @media (max-width: 768px) {
+            .page-wrap { grid-template-columns: 1fr; }
+            .card-thumb { display: none; }
+            nav { padding: 0 16px; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">Herambha</a>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/blogs">Blogs</a>
+        <a href="/login">Login</a>
+
+        <a id="user-circle" href="/dashboard" style="
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #4f8ef7;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 15px;
+            margin-left: 10px;
+        "></a>
+    </div>
+    <div class="nav-right">
+        <input type="search" id="search-input" placeholder="Search posts...">
+        <a href="/register" class="btn-nav">Register</a>
+    </div>
+</nav>
+
+<div class="page-wrap">
+
+    <!-- BLOG LIST -->
+    <main>
+        <div class="blog-list" id="blog-list">
+            <div class="loading">Loading posts...</div>
+        </div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-box">
+            <h3>Trending Posts</h3>
+            <div id="trending"></div>
+        </div>
+        <div class="sidebar-box">
+            <h3>Tags</h3>
+            <div class="tag-list" id="tag-list"></div>
+        </div>
+    </aside>
+
+</div>
+
+<script>
+    window.onload = function () {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const username = localStorage.getItem("username");
+
+    const loginBtn = document.getElementById("login-btn");
+    const registerBtn = document.getElementById("register-btn");
+    const postBtn = document.getElementById("post-btn");
+    const userCircle = document.getElementById("user-circle");
+
+    if (isLoggedIn === "true") {
+        // hide login/register
+        if (loginBtn) loginBtn.style.display = "none";
+        if (registerBtn) registerBtn.style.display = "none";
+
+        // show user first letter
+        if (userCircle && username) {
+            userCircle.style.display = "inline-flex";
+            userCircle.innerText = username.charAt(0).toUpperCase();
+        }
+
+        // change post → publish
+        if (postBtn) {
+            postBtn.innerText = "Publish";
+            postBtn.href = "/publish";
+        }
+    }
+};
+    async function loadPosts() {
+        try {
+            const res = await fetch('/api/all_posts');
+            const posts = await res.json();
+            renderPosts(posts);
+            renderTrending(posts.slice(0, 4));
+            renderTags(posts);
+        } catch {
+            document.getElementById('blog-list').innerHTML = '<div class="empty"><h3>Could not load posts</h3><p>Make sure the server is running.</p></div>';
+        }
+    }
+
+    function initials(name) {
+        return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    function renderPosts(posts) {
+        const list = document.getElementById('blog-list');
+        if (!posts.length) {
+            list.innerHTML = '<div class="empty"><h3>No posts yet</h3><p>Be the first to publish!</p></div>';
+            return;
+        }
+
+        list.innerHTML = posts.map(p => `
+            <a class="blog-card" href="/post?id=${p.id}">
+                <div class="card-thumb">No Image</div>
+                <div class="card-body">
+                    <div class="card-tags">
+                        ${(p.tags || []).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
+                    </div>
+                    <div class="card-title">${p.title}</div>
+                    <div class="card-excerpt">${p.content}</div>
+                    <div class="card-meta">
+                        <div class="avatar">${initials(p.author)}</div>
+                        <span>${p.author}</span>
+                        <span class="meta-dot">•</span>
+                        <span>${String(p.date).slice(0, 10)}</span>
+                        <span class="meta-dot">•</span>
+                        <span>❤️ ${p.likes}</span>
+                        <span class="meta-dot">•</span>
+                        <span>💬 ${p.comments}</span>
+                    </div>
+                </div>
+            </a>
+        `).join('');
+    }
+
+    function renderTrending(posts) {
+        document.getElementById('trending').innerHTML = posts.map((p, i) => `
+            <a class="trending-item" href="/post?id=${p.id}">
+                <div class="trend-num">${i + 1}</div>
+                <div class="trend-title">${p.title}</div>
+            </a>
+        `).join('');
+    }
+
+    function renderTags(posts) {
+        const all = [...new Set(posts.flatMap(p => p.tags || []))];
+        const tags = all.length ? all : ['flask', 'python', 'backend', 'frontend', 'devops'];
+        document.getElementById('tag-list').innerHTML = tags.map(t =>
+            `<a class="tag-pill" href="#">${t}</a>`
+        ).join('');
+    }
+
+    // search
+    document.getElementById('search-input').addEventListener('keydown', async e => {
+        if (e.key === 'Enter') {
+            const q = e.target.value.trim();
+            if (!q) return loadPosts();
+            try {
+                const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+                const data = await res.json();
+                if (Array.isArray(data)) renderPosts(data);
+                else document.getElementById('blog-list').innerHTML = '<div class="empty"><h3>No results found</h3></div>';
+            } catch {}
+        }
+    });
+
+    loadPosts();
+</script>
+
+</body>
+</html>
