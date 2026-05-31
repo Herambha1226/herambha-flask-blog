@@ -8,3 +8,4 @@ email-validator
 Werkzeug
 python-dotenv
 SQLAlchemy
+gunicorn
