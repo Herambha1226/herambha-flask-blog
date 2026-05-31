@@ -17,13 +17,14 @@ python flask,HTML,CSS,JS (JavaScript).
 ```
 Backend  -> Python,Flask,SQLALchemy,Flask-Login,Flask-Mail,
 Frontend -> HTML,CSS,JavaScript
-Database -> SQLlite
+Database -> PostgreSQL (Supabase)  
 Auth     -> OTP Email Verification, Flask-Login session
+Deploy   -> Render
 ```
 ---
 ## WebSite Live Link
 ```
-Comming Soon ...
+https://herambha-flask-blog.onrender.com/
 ```
 ---
 ## Screenshots
@@ -49,6 +50,19 @@ Comming Soon ...
 - How to protect routes using authentication and the `@login_required` decorator
 - How to validate user input using WTForms validators (DataRequired, Email, Length, EqualTo)
 - How to protect forms from Cross-Site Request Forgery (CSRF) attacks using Flask-WTF
+
+---
+## My First Blog in My Website
+```
+https://herambha-flask-blog.onrender.com/post?id=1
+```
+---
+
+## Known Issue
+
+> Email OTP is currently shown on screen instead of being sent to email
+> because Render free tier blocks all outgoing SMTP ports (587, 465, 25).
+> This will be fixed when migrating to a paid plan or PythonAnywhere.
 
 ---
 ## Author
