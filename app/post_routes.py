@@ -217,6 +217,8 @@ def all_posts():
 @login_required
 def delete_post(id):
     data = USER_POST_db.query.get_or_404(id)
+    if post.author != current_user.username:
+        return jsonify({"message": "Not authorized to delete this post!"}), 403
     COMMENTS.query.filter_by(post_id=id).delete()
     Likes.query.filter_by(post_id=id).delete()
 
