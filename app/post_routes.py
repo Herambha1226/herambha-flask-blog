@@ -12,7 +12,7 @@ from wtforms import StringField,TextAreaField
 from wtforms.validators import length,DataRequired
 from werkzeug.datastructures import ImmutableMultiDict
 from flask_login import login_required,current_user
-from extensions import db,login_manager,csrf,mail
+from app.extensions import db,login_manager,csrf,mail
 
 # initialize the bluprint
 post_bp = Blueprint("post",__name__)

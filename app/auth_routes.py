@@ -15,7 +15,7 @@ from flask_mail import Mail,Message
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash,check_password_hash
 from werkzeug.datastructures import ImmutableMultiDict
-from extensions import db,login_manager,csrf,mail
+from app.extensions import db,login_manager,csrf,mail
 # initialize bluprint 
 auth_bp = Blueprint("auth",__name__)
 

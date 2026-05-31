@@ -5,9 +5,9 @@ from flask import Flask,render_template
 from dotenv import load_dotenv
 load_dotenv()
 
-from extensions import db,login_manager,csrf,mail
-from auth_routes import auth_bp
-from post_routes import post_bp
+from app.extensions import db,login_manager,csrf,mail
+from app.auth_routes import auth_bp
+from app.post_routes import post_bp
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("APP_PASSWORD")
