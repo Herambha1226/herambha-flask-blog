@@ -176,8 +176,9 @@ def send_otp():
     ))
     db.session.commit()
 
-    send_otp_email(user_email,otp_user)
-    return jsonify({"message":"OTP Sent Successfully !"})
+    #send_otp_email(user_email,otp_user)
+    return jsonify({"message":"OTP Sent Successfully !",
+                    "otp":str(otp_user)}),200
 
 
 
