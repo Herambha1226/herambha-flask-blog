@@ -23,9 +23,8 @@ Deploy   -> Render
 ```
 ---
 ## WebSite Live Link
-```
-https://herambha-flask-blog.onrender.com/
-```
+[herambha-flask-blog.onrender.com](https://herambha-flask-blog.onrender.com/)
+
 ---
 ## Screenshots
 ### Home Page
@@ -53,9 +52,8 @@ https://herambha-flask-blog.onrender.com/
 
 ---
 ## My First Blog in My Website
-```
-https://herambha-flask-blog.onrender.com/post?id=1
-```
+[Read My Blog](https://herambha-flask-blog.onrender.com/post?id=1)
+
 ---
 
 ## Known Issue
